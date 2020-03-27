@@ -7,9 +7,9 @@ const { writeFile } = require('fs');
 
 const ora = require('ora');
 const path = require('path');
-
+const fse = require('fs-extra');
 program
-    .usage(`<template-type> ['js' | 'ts']`);
+    .usage(`<template-type> ['js' | 'ts']  <dir?> [dir-name]` );
 /**
  * Help.
  */
@@ -17,7 +17,10 @@ program.on('--help', () => {
     console.log('  Examples:');
     console.log();
     console.log(chalk.gray('    # create a new js-type project with webpack'));
-    console.log('    $ simpack init js');
+    console.log('    $ packim init js');
+    console.log();
+    console.log(chalk.gray('    # create a new ts-type project in test dir with webpack'));
+    console.log('    $ packim init ts test');
     console.log();
 });
 function help() {
@@ -34,7 +37,7 @@ const repo = `${pkg.author}/${pkg.name}-template/`;
 
 if(desk) {
     if(/^\w+$/.test(desk)) {
-        downTpl();
+        loadTpl();
     } else {
         console.log(chalk.red(`[Name error]: ${desk} is a terrible name!`));
         process.exit(1);
@@ -48,7 +51,7 @@ if(desk) {
           answers => {
               if(answers.ok) {
                 desk = '';
-                downTpl();
+                loadTpl();
               } else {
                   process.exit(0);
               }
@@ -56,41 +59,18 @@ if(desk) {
       )
 }
 
-function downTpl() {
-    const spinner = ora('downloading template')
+function loadTpl() {
+    const spinner = ora('loading template')
     spinner.start()
-    download(repo, desk, (err) => {
-        if (!err) {
-            if(type === 'ts') {
-                const tsconfig = require('../tsconfig');
-                    generateFile(
-                        path.resolve(process.cwd(), desk, 'tsconfig.json'),
-                        jsonIfy(tsconfig)
-                    ).then(
-                        res => {
-                            spinner.stop();
-                            console.log(chalk.greenBright('Suceess init!'));
-                        }
-                    )
-            } else {
-                spinner.stop();
-            }
+    fse.copy(
+        path.resolve(__dirname, `../template/${type}`),
+        path.resolve(process.cwd(), 'desk')
+    ).then(
+        () => {
+            spinner.stop();
+            console.log(chalk.green('[Create]: init successfully!'))
         }
-    });
+    ).catch(
+        err => console.log(err)
+    );
 }
-
-function generateFile(path, data) {
-    return new Promise((resolve, reject) => {
-        writeFile(path, data, (err) => {
-            if(err) throw err;
-            resolve();
-        })
-    });
-}
-
-
-function jsonIfy(parse) {
-    return JSON.stringify(parse, null, '\t');
-}
-
-

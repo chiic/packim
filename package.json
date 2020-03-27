@@ -1,15 +1,15 @@
 {
-  "name": "simpack",
+  "name": "packim",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "rimraf ./dist && tsc",
-    "start": "simpack"
+    "start": "packim"
   },
   "bin": {
-    "simpack": "dist/index.js",
-    "simpack-init": "dist/init.js"
+    "packim": "dist/packim.js",
+    "packim-init": "dist/packim-init.js"
   },
   "author": "chiic",
   "license": "MIT",
@@ -17,6 +17,7 @@
     "chalk": "^3.0.0",
     "commander": "^5.0.0",
     "download-git-repo": "^3.0.2",
+    "fs-extra": "^9.0.0",
     "inquirer": "^7.1.0",
     "ora": "^4.0.3",
     "os-homedir": "^2.0.0",
