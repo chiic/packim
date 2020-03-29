@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf ./dist && tsc",
+    "build": "rimraf ./bin && tsc",
     "start": "packim"
   },
   "bin": {
-    "packim": "dist/packim.js",
-    "packim-init": "dist/packim-init.js"
+    "packim": "bin/packim.js",
+    "packim-init": "bin/packim-init.js"
   },
   "author": "chiic",
   "license": "MIT",

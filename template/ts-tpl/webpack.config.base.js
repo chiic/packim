@@ -9,11 +9,11 @@ function resolve(dir) {
 }
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
   module: {
     rules: [{
-      test: /\.js$/,
-      use: 'babel-loader',
+      test: /\.tsx?$/,
+      use: 'ts-loader',
       exclude: /node_modules/
     }, {
       test: /\.s[ac]css$/,
@@ -45,7 +45,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.json'],
+    extensions: [ '.tsx', '.ts', '.json' ],
     alias: {
       '@': resolve('src'),
       '~': resolve('assets')
