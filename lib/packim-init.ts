@@ -33,7 +33,6 @@ const type = program.args[0];
 let desk = program.args[1];
 
 const pkg = require('../package');
-const repo = `${pkg.author}/${pkg.name}-template/`;
 
 if(desk) {
     if(/^\w+$/.test(desk)) {
@@ -63,12 +62,12 @@ function loadTpl() {
     const spinner = ora('loading template')
     spinner.start()
     fse.copy(
-        path.resolve(__dirname, `../template/${type}`),
-        path.resolve(process.cwd(), 'desk')
+        path.resolve(__dirname, `../template/${type}-tpl`),
+        path.resolve(process.cwd(), desk)
     ).then(
         () => {
             spinner.stop();
-            console.log(chalk.green('[Create]: init successfully!'))
+            console.log(chalk.green('[Create]: Initialization complete!'))
         }
     ).catch(
         err => console.log(err)
