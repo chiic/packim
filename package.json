@@ -2,7 +2,6 @@
   "name": "packim",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "rimraf ./bin && tsc",
     "start": "packim"
