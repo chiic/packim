@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 const program = require('commander');
 const chalk = require('chalk');
-const download = require('download-git-repo');
 const inquirer = require('inquirer');
-const { writeFile } = require('fs');
 const ora = require('ora');
 const path = require('path');
 const fse = require('fs-extra');
@@ -24,13 +22,12 @@ program.on('--help', () => {
 });
 function help() {
     program.parse(process.argv);
-    if (program.args.length < 1)
+    if (program.args.length <= 1)
         return program.help();
 }
 help();
 const type = program.args[0];
 let desk = program.args[1];
-const pkg = require('../package');
 if (desk) {
     if (/^\w+$/.test(desk)) {
         loadTpl();

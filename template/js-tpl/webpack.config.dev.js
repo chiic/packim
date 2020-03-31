@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = merge(common, {
+    devtool: 'inline-source-map',
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
