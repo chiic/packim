@@ -22,7 +22,7 @@ program.on('--help', () => {
 });
 function help() {
     program.parse(process.argv);
-    if (program.args.length <= 1)
+    if (program.args.length < 1)
         return program.help();
 }
 help();
