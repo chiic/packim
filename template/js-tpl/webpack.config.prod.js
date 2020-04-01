@@ -8,7 +8,7 @@ module.exports = merge(common, {
     mode: 'none',
     devtool: 'source-map',
     plugins: [
-        new UglifyJSPlugin({
+        new UglifyJsPlugin({
             sourceMap: true
         }),
         new webpack.DefinePlugin({
