@@ -4,6 +4,8 @@ const {
   CleanWebpackPlugin
 } = require('clean-webpack-plugin');
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
