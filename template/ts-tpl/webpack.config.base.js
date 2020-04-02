@@ -4,6 +4,8 @@ const {
   CleanWebpackPlugin
 } = require('clean-webpack-plugin');
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
@@ -16,21 +18,13 @@ module.exports = {
       use: 'ts-loader',
       exclude: /node_modules/
     }, {
-      test: /\.s[ac]ss$/,
+      test: /\.(sa|sc|c)ss$/,
       use: [
-        'style-loader',
+        MiniCssExtractPlugin.loader,
         'css-loader',
         'sass-loader'
       ]
-    },
-    {
-      test: /\.css$/,
-      use: [
-        'style-loader',
-        'css-loader'
-      ]
-    },
-    {
+    },{
       test: /\.(png|svg|jpg|gif)$/,
       use: [
         'file-loader'
@@ -53,6 +47,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       title: 'packim',
       template: resolve('index.html')
