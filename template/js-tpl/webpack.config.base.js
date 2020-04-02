@@ -12,36 +12,27 @@ module.exports = {
   entry: './src/index.js',
   module: {
     rules: [{
-      test: /\.js$/,
-      use: 'babel-loader',
-      exclude: /node_modules/
-    }, {
-      test: /\.s[ac]ss$/,
-      use: [
-        'style-loader',
-        'css-loader',
-        'sass-loader'
-      ]
-    },
-    {
-      test: /\.css$/,
-      use: [
-        'style-loader',
-        'css-loader'
-      ]
-    },
-    {
-      test: /\.(png|svg|jpg|gif)$/,
-      use: [
-        'file-loader'
-      ]
-    },
-    {
-      test: /\.(woff|woff2|eot|ttf|otf)$/,
-      use: [
-        'file-loader'
-      ]
-    }
+        test: /\.js$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      }, {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
+      }, {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader'
+        ]
+      }, {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          'file-loader'
+        ]
+      }
     ]
   },
   resolve: {
@@ -53,6 +44,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       title: 'packim',
       template: resolve('index.html')
