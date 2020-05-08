@@ -9,3 +9,4 @@ declare function help(): any;
 declare const type: any;
 declare let desk: any;
 declare function loadTpl(): void;
+declare function createDir(type: any): void;

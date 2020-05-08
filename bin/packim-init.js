@@ -55,8 +55,18 @@ else {
 function loadTpl() {
     const spinner = ora('loading template');
     spinner.start();
-    fse.copy(path.resolve(__dirname, `../template/${type}-tpl`), path.resolve(process.cwd(), desk)).then(() => {
+    createDir(type);
+    fse.copy(path.resolve(__dirname, `../tpl`), path.resolve(process.cwd(), desk)).then(() => {
         spinner.stop();
         console.log(chalk.green('[Create]: Initialization complete!'));
     }).catch(err => console.log(err));
+}
+function createDir(type) {
+    if (type === 'ts') {
+        fse.copy(
+            path.resolve(__dirname, `../options/tsconfig.json`),
+            path.resolve(__dirname, `../tpl`)
+        ).catch(err => console.log(err));
+    }
+    fse.writeFile(path.resolve(__dirname, `../tpl/src/index.${type}`), '');
 }
