@@ -5,6 +5,8 @@ declare const inquirer: any;
 declare const ora: any;
 declare const path: any;
 declare const fse: any;
+declare const linkDir: any;
+declare const deDir: any;
 declare function help(): any;
 declare const type: any;
 declare let desk: any;

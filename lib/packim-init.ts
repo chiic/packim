@@ -5,6 +5,10 @@ const inquirer = require('inquirer');
 const ora = require('ora');
 const path = require('path');
 const fse = require('fs-extra');
+
+const linkDir = path.resolve(__dirname, `../.tpl`);
+const deDir = path.resolve(__dirname, `../tpl`);
+
 program
     .usage(`<template-type> ['js' | 'ts']  <dir?> [dir-name]`);
 /**
@@ -20,17 +24,14 @@ program.on('--help', () => {
     console.log('    $ packim init ts test');
     console.log();
 });
-
 function help() {
     program.parse(process.argv);
     if (program.args.length < 1)
         return program.help();
 }
 help();
-
 const type = program.args[0];
 let desk = program.args[1];
-
 if (desk) {
     if (/^\w+$/.test(desk)) {
         loadTpl();
@@ -48,34 +49,49 @@ else {
         }]).then(answers => {
         if (answers.ok) {
             desk = '';
+            if (
+                fse.existsSync(path.resolve(process.cwd())) &&
+                fse.readdirSync(path.resolve(process.cwd())).length
+                ) {
+                console.log(chalk.red(`[File error]: The current folder is not an empty folder!`));
+                process.exit(0)
+            }
             loadTpl();
         }
         else {
             process.exit(0);
         }
-    });
+    })
 }
 function loadTpl() {
     const spinner = ora('loading template');
     spinner.start();
-    createDir(type)
-    fse.copy(
-        path.resolve(__dirname, `../tpl`),
-        path.resolve(process.cwd(), desk)
-    ).then(() => {
+    createDir(type);
+    fse.copy(linkDir, path.resolve(process.cwd(), desk)).then(() => {
         spinner.stop();
+        fse.remove(linkDir);
         console.log(chalk.green('[Create]: Initialization complete!'));
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        console.log(err);
+        fse.remove(linkDir);
+        desk
+            ? fse.remove(path.resolve(process.cwd(), desk))
+            : null;
+    });
 }
-
 function createDir(type) {
-    if (type === 'ts') {
-        fse.copy(
-            path.resolve(__dirname, `options/tsconfig.json`),
-            path.resolve(__dirname, `tpl`)
-        ).catch(err => console.log(err));
-    }
-    fse.writeFile(
-        path.resolve(__dirname, `tpl/src/index.${type}`), ''
+    fse.copySync(
+        deDir,
+        linkDir
     )
+    if (type === 'ts') {
+        fse.writeFileSync(
+            linkDir + 'tsconfig.json',
+            JSON.stringify(require(path.resolve(__dirname, `../options/tsconfig.json`)), null ,'\t')
+        );
+    }
+    fse.writeFileSync(
+        path.resolve(linkDir, `src/index.${type}`),
+        `// hello world.`
+    );
 }
