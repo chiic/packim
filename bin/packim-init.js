@@ -5,6 +5,7 @@ const inquirer = require('inquirer');
 const ora = require('ora');
 const path = require('path');
 const fse = require('fs-extra');
+const fs = require('fs');
 const linkDir = path.resolve(__dirname, `../.tpl`);
 const deDir = path.resolve(__dirname, `../tpl`);
 program
@@ -78,7 +79,33 @@ function loadTpl() {
 function createDir(type) {
     fse.copySync(deDir, linkDir);
     if (type === 'ts') {
-        fse.writeFileSync(linkDir + 'tsconfig.json', JSON.stringify(require(path.resolve(__dirname, `../options/tsconfig.json`)), null, '\t'));
+        fse.writeFileSync(
+            path.resolve(linkDir, 'tsconfig.json'),
+            JSON.stringify(require(path.resolve(__dirname, `../options/tsconfig.json`)), null, '\t')
+        );
+        fse.renameSync(path.resolve(linkDir, `src/index.js`), path.resolve(linkDir, `src/index.ts`));
     }
-    fse.writeFileSync(path.resolve(linkDir, `src/index.${type}`), `// hello world.`);
+    insertBaseOptions(type);
+}
+
+function insertBaseOptions(_type) {
+    console.log(linkDir)
+    let resoure = fs.readFileSync(
+        path.resolve(linkDir,'./webpack.config.base.js'),
+        {
+            encoding: 'utf-8'
+        }
+    );
+    let _res = resoure.replace(/`<%Entry%>`/gm, `'./src/index.${_type}'`)
+    if (_type === 'ts') {
+        _res = _res.replace(/`<%Loader%>`/gm, `{\n\t\t\ttest: /\.tsx?$/, \n\t\t\tuse: 'ts-loader',\n\t\t\texclude: /node_modules/\n\t\t}`);
+    }
+    if(_type === 'js') {
+        _res = _res.replace(/`<%Loader%>`,\s/gm, ``);
+    }
+    console.log(_res);
+    fs.writeFileSync(
+        path.resolve(linkDir,'./webpack.config.base.js'),
+        _res
+    );
 }
