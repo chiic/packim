@@ -103,7 +103,6 @@ function insertBaseOptions(_type) {
     if(_type === 'js') {
         _res = _res.replace(/`<%Loader%>`,\s/gm, ``);
     }
-    console.log(_res);
     fs.writeFileSync(
         path.resolve(linkDir,'./webpack.config.base.js'),
         _res
