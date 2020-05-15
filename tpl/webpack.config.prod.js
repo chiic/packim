@@ -1,17 +1,17 @@
 const merge = require('webpack-merge')
 const common = require('./webpack.config.base');
-const path = require('path');
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = merge(common, {
     mode: 'production',
     devtool: 'source-map',
     optimization: {
+        minimize: true,
         minimizer: [
-            new UglifyJsPlugin({
-                sourceMap: true,
-            }),
+            new TerserPlugin({
+                parallel: true
+            })
         ],
         runtimeChunk: {
             name: entrypoint => `runtime-${entrypoint.name}`
