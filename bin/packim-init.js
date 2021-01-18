@@ -32,7 +32,7 @@ help();
 const type = program.args[0];
 let desk = program.args[1];
 if (desk) {
-    if (/^\w+$/.test(desk)) {
+    if (/^[\w-]+$/.test(desk)) {
         loadTpl();
     }
     else {
